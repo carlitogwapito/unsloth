@@ -75,3 +75,20 @@ def test_bad_mapping_redirects_keep_canonical_repo_case():
 def test_4bit_load_avoids_unpublished_bnb_repos(name, expected):
     get_model_name, _ = _load_get_model_name()
     assert get_model_name(name, load_in_4bit = True) == expected
+
+
+@pytest.mark.parametrize(
+    "name, expected",
+    [
+        ("upstage/SOLAR-10.7B-v1.0", "upstage/SOLAR-10.7B-v1.0"),
+        ("allenai/Llama-3.1-Tulu-3-8B", "unsloth/Llama-3.1-Tulu-3-8B"),
+        ("unsloth/Llama-3.1-Tulu-3-8B", "unsloth/Llama-3.1-Tulu-3-8B"),
+        ("allenai/Llama-3.1-Tulu-3-70B", "allenai/Llama-3.1-Tulu-3-70B"),
+        ("NousResearch/Hermes-3-Llama-3.1-405B", "NousResearch/Hermes-3-Llama-3.1-405B"),
+        ("open-thoughts/OpenThinker-7B", "open-thoughts/OpenThinker-7B"),
+        ("mistralai/Pixtral-12B-Base-2409", "unsloth/Pixtral-12B-Base-2409"),
+    ],
+)
+def test_non4bit_resolution_keeps_existing_repo_choices(name, expected):
+    get_model_name, _ = _load_get_model_name()
+    assert get_model_name(name, load_in_4bit = False) == expected
